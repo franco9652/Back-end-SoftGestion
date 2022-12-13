@@ -22,9 +22,9 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   role: {
-    type: String,
+    type: Boolean,
     required: true,
-    default: 'user',
+    default: false,
     trim: true,
   },
   // TO DO agregar las referencias correspondientes.
