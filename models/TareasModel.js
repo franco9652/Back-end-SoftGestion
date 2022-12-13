@@ -10,7 +10,7 @@ const TareasSchema = mongoose.Schema({
   nombre: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: 'x',
+    ref: 'User',
   },
   obra: {
     type: String,
@@ -20,9 +20,15 @@ const TareasSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  userId: {
+  userId: [{
     type: mongoose.Types.ObjectId,
     required: true,
+    red: 'User',
+  }],
+  isSucces: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 });
 
