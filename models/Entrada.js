@@ -14,13 +14,11 @@ const entradaSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  user: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
-      required: false,
-    },
-  ],
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
 });
 
 const Entrada = mongoose.model('Entrada', entradaSchema);

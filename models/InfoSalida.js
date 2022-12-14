@@ -14,13 +14,11 @@ const infoSalidaSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  user: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
-      required: false,
-    },
-  ],
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
 });
 
 const InfoSalida = mongoose.model('InfoSalida', infoSalidaSchema);
