@@ -38,7 +38,7 @@ const UserSchema = mongoose.Schema({
   }],
   asignacionTareas: [{
     type: mongoose.Types.ObjectId,
-    ref: 'x',
+    ref: 'Tarea',
   }],
 
 });
