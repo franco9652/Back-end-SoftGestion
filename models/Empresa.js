@@ -23,6 +23,7 @@ const empresaSchema = mongoose.Schema({
   facturacion: {
     type: String,
     default: null,
+    trim: true,
   },
   users: [
     {
