@@ -8,11 +8,11 @@ const entradaSchema = mongoose.Schema({
   },
   latitud: {
     type: String,
-    required: false,
+    required: true,
   },
   longitud: {
     type: String,
-    required: false,
+    required: true,
   },
   user: {
     type: mongoose.Types.ObjectId,
