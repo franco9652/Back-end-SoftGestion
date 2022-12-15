@@ -27,17 +27,17 @@ const UserSchema = mongoose.Schema({
     default: false,
     trim: true,
   },
-  // TO DO agregar las referencias correspondientes.
+  // ! espero esten de acuerdo con las referencias que les puse
   entradas: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'x',
+      ref: 'e',
     },
   ],
   infoSalida: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'x',
+      ref: 'iS',
     },
   ],
   asignacionTareas: [
