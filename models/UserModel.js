@@ -27,20 +27,25 @@ const UserSchema = mongoose.Schema({
     default: false,
     trim: true,
   },
-  // TO DO agregar las referencias correspondientes.
-  entradas: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'x',
-  }],
-  infoSalida: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'x',
-  }],
-  asignacionTareas: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'x',
-  }],
-
+  // TO DO agregar la referencia de asignacionTareas
+  entradas: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Entrada', //  ! espero este consistente la ref
+    },
+  ],
+  infoSalida: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'InfoSalida', // ! espero este consistente la ref
+    },
+  ],
+  asignacionTareas: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'x',
+    },
+  ],
 });
 
 const User = mongoose.model('User', UserSchema);

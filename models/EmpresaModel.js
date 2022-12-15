@@ -6,6 +6,11 @@ const empresaSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
+  constructora: {
+    // ? ta bien este atributo?
+    type: Boolean,
+    required: true,
+  },
   habilitado: {
     type: Boolean,
     default: false,
@@ -21,7 +26,7 @@ const empresaSchema = mongoose.Schema({
     trim: true,
   },
   facturacion: {
-    type: String,
+    type: String, // ? type?
     default: null,
     trim: true,
   },
