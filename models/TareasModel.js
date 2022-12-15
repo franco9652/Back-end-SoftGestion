@@ -20,11 +20,11 @@ const TareasSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  userId: [{
+  userId: {
     type: mongoose.Types.ObjectId,
     required: true,
-    red: 'User',
-  }],
+    ref: 'User',
+  },
   isSucces: {
     type: Boolean,
     required: true,
