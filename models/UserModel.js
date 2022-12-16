@@ -30,13 +30,13 @@ const UserSchema = mongoose.Schema({
   entradas: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'e',
+      ref: 'Entrada',
     },
   ],
   infoSalida: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'iS',
+      ref: 'InfoSalida',
     },
   ],
   asignacionTareas: [
