@@ -3,7 +3,9 @@ const User = require('../models/UserModel');
 
 const userController = {
   createUser: async (req, res) => {
-    const { name, lastName, image, dni, role } = req.body;
+    const {
+      name, lastName, image, dni, role,
+    } = req.body;
     try {
       let user = await User.findOne({ dni });
       if (user) {
@@ -61,19 +63,15 @@ const userController = {
     const { id } = req.params;
     try {
       User.findOneAndUpdate({ _id: id }, req.body, { new: true })
-        .then((data) =>
-          res.status(200).json({
-            response: 'usuario actualizado',
-            data,
-            success: true,
-          })
-        )
-        .catch((err) =>
-          res.status(400).json({
-            response: err.message,
-            success: false,
-          })
-        );
+        .then((data) => res.status(200).json({
+          response: 'usuario actualizado',
+          data,
+          success: true,
+        }))
+        .catch((err) => res.status(400).json({
+          response: err.message,
+          success: false,
+        }));
     } catch (error) {
       res.status(400).json({
         respnse: error.message,
