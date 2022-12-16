@@ -27,7 +27,6 @@ const UserSchema = mongoose.Schema({
     default: false,
     trim: true,
   },
-  // ! espero esten de acuerdo con las referencias que les puse
   entradas: [
     {
       type: mongoose.Types.ObjectId,
