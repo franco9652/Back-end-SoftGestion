@@ -5,11 +5,17 @@ const empresaSchema = mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
-  constructora: {
-    // ? ta bien este atributo?
+  isLogistica: {
     type: Boolean,
     required: true,
+    default: false,
+  },
+  isConstructora: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   habilitado: {
     type: Boolean,
@@ -20,15 +26,15 @@ const empresaSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  owner: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   facturacion: {
     type: String, // ? type?
     default: null,
     trim: true,
+  },
+  owner: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    trim: 'User',
   },
   users: [
     {
