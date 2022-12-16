@@ -22,6 +22,7 @@ const infoSalidaController = {
         user,
       }).populate('user');
       nuevaInfoSalida.save();
+      user.infoSalida.push(nuevaInfoSalida._id);
       user.save();
       return res.status(201).json({
         response: nuevaInfoSalida,
@@ -42,7 +43,7 @@ const infoSalidaController = {
       if (infoSalida) {
         // Eliminar el id del user que marca salida
         await User.findOneAndUpdate(
-          { _id }, // ? ta ok?
+          { _id },
           { $pull: { infoSalida: _id } },
         );
         return res.status(200).json({
