@@ -5,7 +5,6 @@ const empresaSchema = mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   isLogistica: {
     type: Boolean,
@@ -34,7 +33,7 @@ const empresaSchema = mongoose.Schema({
   owner: {
     type: mongoose.Types.ObjectId,
     required: true,
-    trim: 'User',
+    ref: 'User',
   },
   users: [
     {
