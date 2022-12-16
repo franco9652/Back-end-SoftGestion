@@ -22,6 +22,7 @@ const entradaController = {
         user,
       }).populate('user');
       nuevaEntrada.save();
+      user.entradas.push(nuevaEntrada._id);
       user.save();
       return res.status(201).json({
         response: nuevaEntrada,
@@ -42,8 +43,8 @@ const entradaController = {
       if (entrada) {
         // Eliminar el id del user que marca entrada
         await User.findOneAndUpdate(
-          { _id }, // ? ta ok?
-          { $pull: { infoSalida: _id } },
+          { _id },
+          { $pull: { entradas: _id } },
         );
         return res.status(200).json({
           response: 'Entrada eliminada de manera exitosa',
