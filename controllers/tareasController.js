@@ -1,3 +1,6 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable function-paren-newline */
+/* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/UserModel');
