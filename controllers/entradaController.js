@@ -43,7 +43,7 @@ const entradaController = {
         // Eliminar el id del user que marca entrada
         await User.findOneAndUpdate(
           { _id }, // ? ta ok?
-          { $pull: { infoSalida: _id } }
+          { $pull: { infoSalida: _id } },
         );
         return res.status(200).json({
           response: 'Entrada eliminada de manera exitosa',
