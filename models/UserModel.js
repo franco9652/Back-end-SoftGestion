@@ -45,6 +45,12 @@ const UserSchema = mongoose.Schema({
       ref: 'Tarea',
     },
   ],
+  asignacionTareas: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Tarea',
+    },
+  ],
 });
 
 const User = mongoose.model('User', UserSchema);
