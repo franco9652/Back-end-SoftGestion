@@ -1,3 +1,6 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable function-paren-newline */
+/* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 const User = require('../models/UserModel');
@@ -5,6 +8,8 @@ const Tarea = require('../models/TareasModel');
 
 const tareaControler = {
   crearTarea: async (req, res) => {
+    const { fechaHora, obra, tarea } = req.body;
+    const { myId, userId } = req.params;
     const { fechaHora, obra, tarea } = req.body;
     const { myId, userId } = req.params;
     try {
@@ -115,6 +120,19 @@ const tareaControler = {
     const { taskId } = req.params;
     try {
       await Tarea.findOneAndUpdate({ _id: taskId }, req.body, { new: true })
+        .then((data) =>
+          res.status(200).json({
+            response: 'Tarea Actualizada',
+            data,
+            success: true,
+          })
+        )
+        .catch((err) =>
+          res.status(400).json({
+            response: err.message,
+            success: false,
+          })
+        );
         .then((data) =>
           res.status(200).json({
             response: 'Tarea Actualizada',

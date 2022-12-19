@@ -18,6 +18,11 @@ const userController = {
         image,
         dni,
         role,
+        name,
+        lastName,
+        image,
+        dni,
+        role,
       });
       user.save();
       return res.status(201).json({
@@ -33,6 +38,7 @@ const userController = {
   },
 
   deleteUser: async (req, res) => {
+    const { id } = req.params;
     const { id } = req.params;
     try {
       User.findOneAndDelete({ _id: id }, (err, data) => {
