@@ -30,19 +30,21 @@ const UserSchema = mongoose.Schema({
   entradas: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'Entrada', //  ! espero este consistente la ref
+      ref: 'Entrada',
     },
   ],
   infoSalida: [
     {
       type: mongoose.Types.ObjectId,
-      ref: 'InfoSalida', // ! espero este consistente la ref
+      ref: 'InfoSalida',
     },
   ],
-  asignacionTareas: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'Tarea',
-  }],
+  asignacionTareas: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Tarea',
+    },
+  ],
 });
 
 const User = mongoose.model('User', UserSchema);
