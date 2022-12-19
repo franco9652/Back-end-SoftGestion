@@ -4,11 +4,7 @@ const User = require('../models/UserModel');
 const userController = {
   createUser: async (req, res) => {
     const {
-      name,
-      lastName,
-      image,
-      dni,
-      role,
+      name, lastName, image, dni, role,
     } = req.body;
     try {
       let user = await User.findOne({ dni });
@@ -19,7 +15,11 @@ const userController = {
         });
       }
       user = await new User({
-        name, lastName, image, dni, role,
+        name,
+        lastName,
+        image,
+        dni,
+        role,
       });
       user.save();
       return res.status(201).json({
@@ -35,9 +35,7 @@ const userController = {
   },
 
   deleteUser: async (req, res) => {
-    const {
-      id,
-    } = req.params;
+    const { id } = req.params;
     try {
       User.findOneAndDelete({ _id: id }, (err, data) => {
         if (err) {
@@ -45,7 +43,7 @@ const userController = {
             response: err.message,
             success: false,
           });
-        // eslint-disable-next-line no-else-return
+          // eslint-disable-next-line no-else-return
         } else {
           return res.status(200).json({
             response: 'Usuario eliminado',
@@ -81,7 +79,6 @@ const userController = {
       });
     }
   },
-
 };
 
 module.exports = userController;

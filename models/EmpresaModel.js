@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const empresaSchema = mongoose.Schema({
   nombre: {
@@ -6,10 +6,15 @@ const empresaSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  constructora: {
-    // ? ta bien este atributo?
+  isLogistica: {
     type: Boolean,
     required: true,
+    default: false,
+  },
+  isConstructora: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   habilitado: {
     type: Boolean,
@@ -20,15 +25,15 @@ const empresaSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  owner: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   facturacion: {
     type: String, // ? type?
     default: null,
     trim: true,
+  },
+  owner: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: 'User',
   },
   users: [
     {
@@ -41,4 +46,4 @@ const empresaSchema = mongoose.Schema({
 
 const Empresa = mongoose.model('Empresa', empresaSchema);
 
-export default Empresa;
+module.exports = Empresa;
