@@ -5,9 +5,8 @@ const User = require('../models/UserModel');
 
 const empresaController = {
   crearEmpresa: async (req, res) => {
-    const {
-      nombre, constructora, habilitado, direccion, facturacion, owner,
-    } = req.body;
+    const { nombre, constructora, habilitado, direccion, facturacion, owner } =
+      req.body;
     const { usersId } = req.params;
     try {
       // TODO ver que no exista la empresa
@@ -28,7 +27,7 @@ const empresaController = {
       //     success: false,
       //   });
       // }
-      if (adminUser && user) {
+      if (adminUser) {
         const nuevaEmpresa = await new Empresa({
           nombre,
           constructora,
@@ -68,15 +67,19 @@ const empresaController = {
     const { _id } = req.params;
     try {
       Empresa.findOneAndUpdate({ _id }, req.body, { new: true })
-        .then((data) => res.status(200).json({
-          response: 'Empresa actualizada',
-          data,
-          success: true,
-        }))
-        .catch((err) => res.status(400).json({
-          response: err.message,
-          success: false,
-        }));
+        .then((data) =>
+          res.status(200).json({
+            response: 'Empresa actualizada',
+            data,
+            success: true,
+          })
+        )
+        .catch((err) =>
+          res.status(400).json({
+            response: err.message,
+            success: false,
+          })
+        );
     } catch (error) {
       res.status(400).json({
         respnse: error.message,
