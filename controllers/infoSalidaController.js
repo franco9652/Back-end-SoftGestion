@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 const InfoSalida = require('../models/InfoSalidaModel');
@@ -36,15 +37,15 @@ const infoSalidaController = {
     }
   },
   eliminarInfoSalida: async (req, res) => {
-    const { _id } = req.params;
+    const { userId, infoSalidaId } = req.params;
     try {
-      const infoSalida = await InfoSalida.findOne({ _id });
-      await InfoSalida.findOneAndDelete({ _id });
+      const infoSalida = await InfoSalida.findOne({ _id: infoSalidaId });
+      await InfoSalida.findOneAndDelete({ _id: infoSalida });
       if (infoSalida) {
         // Eliminar el id del user que marca salida
         await User.findOneAndUpdate(
-          { _id },
-          { $pull: { infoSalida: _id } },
+          { _id: userId },
+          { $pull: { infoSalida: infoSalidaId } }
         );
         return res.status(200).json({
           response: 'Informacion de salida eliminada de manera exitosa',

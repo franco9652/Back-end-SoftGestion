@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 const Entrada = require('../models/EntradaModel');
@@ -36,15 +37,15 @@ const entradaController = {
     }
   },
   eliminarEntrada: async (req, res) => {
-    const { _id } = req.params;
+    const { userId, entradaId } = req.params;
     try {
-      const entrada = await Entrada.findOne({ _id });
-      await Entrada.findOneAndDelete({ _id });
+      const entrada = await Entrada.findOne({ _id: entradaId });
+      await Entrada.findOneAndDelete({ _id: entradaId });
       if (entrada) {
         // Eliminar el id del user que marca entrada
         await User.findOneAndUpdate(
-          { _id },
-          { $pull: { entradas: _id } },
+          { _id: userId },
+          { $pull: { entradas: entradaId } }
         );
         return res.status(200).json({
           response: 'Entrada eliminada de manera exitosa',
