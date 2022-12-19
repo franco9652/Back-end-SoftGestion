@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const entradaSchema = mongoose.Schema({
   fechaHora: {
@@ -23,4 +23,4 @@ const entradaSchema = mongoose.Schema({
 
 const Entrada = mongoose.model('Entrada', entradaSchema);
 
-export default Entrada;
+module.exports = Entrada;
