@@ -7,15 +7,10 @@ const empresaSchema = mongoose.Schema({
     trim: true,
     unique: true,
   },
-  isLogistica: {
-    type: Boolean,
+  tipoEmpresa: {
+    type: String,
     required: true,
-    default: false,
-  },
-  isConstructora: {
-    type: Boolean,
-    required: true,
-    default: false,
+    enum: ['logistica', 'constructora'],
   },
   habilitado: {
     type: Boolean,
