@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.post('/:myId/:userId', crearTarea);
-router.post('/:taskId', eliminarTarea);
+router.delete('/:taskId', eliminarTarea);
 router.patch('/update/:taskId', modificarTarea);
 
 module.exports = router;
