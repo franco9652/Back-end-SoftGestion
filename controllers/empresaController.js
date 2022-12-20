@@ -1,20 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
-const e = require('express');
 const Empresa = require('../models/EmpresaModel');
 const User = require('../models/UserModel');
 
 const empresaController = {
   crearEmpresa: async (req, res) => {
-    const {
-      nombre,
-      isLogistica,
-      isConstructora,
-      habilitado,
-      direccion,
-      facturacion,
-      users,
-    } = req.body;
+    const { nombre, tipoEmpresa, habilitado, direccion, facturacion, users } =
+      req.body;
     const { myId: owner } = req.params;
     try {
       // ! - si ya existe una empresa registrada el nombre solicitado
@@ -33,34 +25,28 @@ const empresaController = {
           success: false,
         });
       }
-      // ! - si algun usuario no esta registrado
-      users.forEach(async (u) => {
-        const user = await User.findOne({ _id: u });
-        if (!user) {
-          return res.status(400).json({
-            response: 'usuario no encontrado',
-            success: false,
-          });
-        }
-      });
-
-      // TODO luego con middleware - autenticacion
 
       // * creo empresa
       const nuevaEmpresa = await new Empresa({
         nombre,
-        isLogistica,
-        isConstructora,
+        tipoEmpresa,
         habilitado,
         direccion,
         facturacion,
         users,
         owner,
-      }).populate(['users', 'owner']);
-      nuevaEmpresa.save();
-      return res.status(201).json({
-        response: nuevaEmpresa,
-        succes: true,
+      });
+      nuevaEmpresa.save((err, result) => {
+        if (err) {
+          return res.status(404).json({
+            response: err.message,
+            success: false,
+          });
+        }
+        return res.status(202).json({
+          response: result,
+          success: true,
+        });
       });
     } catch (error) {
       res.status(400).json({
@@ -69,23 +55,52 @@ const empresaController = {
       });
     }
   },
-  obtenerEmpresa: async (req, res) => {
+  obtenerUnaEmpresa: async (req, res) => {
     // ! obtener empresa de un duenio
-    const { id } = req.params;
-    const empresa = await Empresa.findOne({ _id: id });
+    const { empresaId } = req.params;
+    const empresa = await Empresa.findOne({ _id: empresaId });
     if (!empresa) {
       return res.status(404).json({ msg: 'Empresa no encontrada' });
     }
-    if (empresa.owner._id.toString() !== req.empresa._id.toString()) {
-      return res.json({ msg: 'Acción no válida' });
+    return res.status(200).json({
+      response: empresa,
+      success: true,
+    });
+  },
+  obtenerEmpresas: async (req, res) => {
+    const { tipoDeEmpresa } = req.query;
+    try {
+      let empresa = await Empresa.find();
+      if (!req.query || tipoDeEmpresa === null || tipoDeEmpresa === undefined) {
+        if (empresa.length > 0) {
+          return res.status(200).json({
+            response: empresa,
+            success: true,
+          });
+        }
+        return res.status(200).json({
+          response: 'La lista de empresas esta vacia',
+          success: false,
+        });
+      }
+      empresa = await Empresa.find({ tipoEmpresa: tipoDeEmpresa });
+      if (empresa.length > 0) {
+        return res.status(200).json({
+          response: empresa,
+          succes: true,
+        });
+      }
+      return res.status(404).json({
+        response: `no hay empresas del tipo ${tipoDeEmpresa}`,
+        succes: false,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        response: error.message,
+        success: false,
+      });
     }
-    res.json(empresa);
   },
-  obtenerEmpresasLogisticas: async (req, res) => {
-    // TODO
-    // const empresas = await Empresa.filter().where(isLogistica);
-  },
-  obtenerEmpresasConstructoras: async (req, res) => {}, // TODO
   modificarEmpresa: async (req, res) => {
     const { myId, empresaId } = req.params;
     try {
