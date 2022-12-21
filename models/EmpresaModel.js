@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
  *     Empresa:
  *       type: object
  *       properties:
- *         name:
+ *         nombre:
  *           type: string
  *           example: Empresa X
  *         tipoEmpresa:
@@ -23,13 +23,11 @@ const mongoose = require('mongoose');
  *           type: string
  *           example: factura.pdf
  *         owner:
- *           type: ObjectId
- *           example: 6asdvaskdvl234p12r9hsdvxzcv234123
+ *           type: string
  *         users:
  *           type: array
  *           items:
- *             type: objectId
- *           example: [6asdvaskdvl234p12r9hsdvxzcv234123, 6asdvaskdvl234p12r9hsdvxzcv234123]
+ *             type: string
  */
 
 const empresaSchema = mongoose.Schema({

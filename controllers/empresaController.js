@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
-const { ObjectId } = require('mongoose');
 const Empresa = require('../models/EmpresaModel');
 const User = require('../models/UserModel');
 
@@ -8,8 +7,7 @@ const empresaController = {
   crearEmpresa: async (req, res) => {
     const { nombre, tipoEmpresa, habilitado, direccion, facturacion } =
       req.body;
-    const { myId } = req.params;
-    const _id = ObjectId.fromString(myId);
+    const { ownerId } = req.params;
     try {
       // ! - si ya existe una empresa registrada el nombre solicitado
       const existeEmpresa = await Empresa.findOne({ nombre });
@@ -20,7 +18,7 @@ const empresaController = {
         });
       }
       // ! - si no hay un usuario registrado con el nombre = owner
-      const adminUser = await User.findOne({ _id });
+      const adminUser = await User.findOne({ _id: ownerId });
       if (!adminUser) {
         return res.status(400).json({
           response: 'usuario admin no encontrado',
@@ -35,7 +33,7 @@ const empresaController = {
         habilitado,
         direccion,
         facturacion,
-        owner: _id,
+        owner: ownerId,
       });
       nuevaEmpresa.save((err, result) => {
         if (err) {
@@ -103,60 +101,50 @@ const empresaController = {
     }
   },
   modificarEmpresa: async (req, res) => {
-    const { myId, empresaId } = req.params;
+    const { empresaId } = req.params;
     try {
-      // ! - si la empresa con empresaId no existe
-      const empresa = await Empresa.findById(empresaId);
+      const empresa = await Empresa.findOneAndUpdate(
+        { _id: empresaId },
+        req.body,
+        { new: true }
+      );
       if (!empresa) {
-        return res.status(404).json({ msg: 'Empresa no encontrada' });
+        return res.status(404).json({
+          response: 'Empresa no encontrada',
+          succes: false,
+        });
       }
-      // ! - si el usuario actual no es el owner
-      if (empresa.owner._id.toString() !== myId.toString()) {
-        return res
-          .status(401)
-          .json({ msg: 'Usuario no autorizado, no eres owner' });
-      }
-      // * actualizo empresa
-      empresa.nombre = req.body.nombre || empresa.nombre;
-      empresa.isLogistica = req.body.isLogistica || empresa.isLogistica;
-      empresa.isConstructora =
-        req.body.isConstructora || empresa.isConstructora;
-      empresa.habilitado = req.body.habilitado || empresa.habilitado;
-      empresa.direccion = req.body.direccion || empresa.direccion;
-      empresa.facturacion = req.body.facturacion || empresa.facturacion;
-      empresa.owner = req.body.owner || empresa.owner;
-      empresa.users = req.body.users || empresa.users;
-      await empresa.save();
       return res.status(200).json({
-        msg: 'Empresa actualizada con exito',
-        succes: true,
+        response: empresa,
+        succes: false,
       });
     } catch (error) {
-      console.log(error);
+      return res.status(400).json({
+        response: error.message,
+        succes: false,
+      });
     }
   },
   eliminarEmpresa: async (req, res) => {
-    const { myId, empresaId } = req.params;
+    const { empresaId } = req.params;
     try {
       // ! - si la empresa con empresaId no existe
-      const empresa = await Empresa.findById(empresaId);
+      const empresa = await Empresa.findOneAndDelete({ _id: empresaId });
       if (!empresa) {
-        return res.status(404).json({ msg: 'Empresa no encontrada' });
+        return res.status(400).json({
+          response: 'Empresa no encontrada',
+          succes: false,
+        });
       }
-      // ! - si el usuario actual no es el owner
-      if (empresa.owner._id.toString() !== myId.toString()) {
-        return res
-          .status(401)
-          .json({ msg: 'Usuario no autorizado, no eres owner' });
-      }
-
-      // TODO desp con el middleware de Auth
-
-      // * elimino empresa
-      await empresa.deleteOne();
-      res.json({ msg: 'Empresa eliminada' });
+      return res.status(200).json({
+        response: 'Empresa eliminada',
+        success: true,
+      });
     } catch (error) {
-      console.log(error);
+      return res.status(400).json({
+        response: error.message,
+        succes: false,
+      });
     }
   },
 };
