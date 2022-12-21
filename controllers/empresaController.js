@@ -1,13 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
+const { ObjectId } = require('mongoose');
 const Empresa = require('../models/EmpresaModel');
 const User = require('../models/UserModel');
 
 const empresaController = {
   crearEmpresa: async (req, res) => {
-    const { nombre, tipoEmpresa, habilitado, direccion, facturacion, users } =
+    const { nombre, tipoEmpresa, habilitado, direccion, facturacion } =
       req.body;
-    const { myId: owner } = req.params;
+    const { myId } = req.params;
+    const _id = ObjectId.fromString(myId);
     try {
       // ! - si ya existe una empresa registrada el nombre solicitado
       const existeEmpresa = await Empresa.findOne({ nombre });
@@ -18,7 +20,7 @@ const empresaController = {
         });
       }
       // ! - si no hay un usuario registrado con el nombre = owner
-      const adminUser = await User.findOne({ _id: owner });
+      const adminUser = await User.findOne({ _id });
       if (!adminUser) {
         return res.status(400).json({
           response: 'usuario admin no encontrado',
@@ -33,8 +35,7 @@ const empresaController = {
         habilitado,
         direccion,
         facturacion,
-        users,
-        owner,
+        owner: _id,
       });
       nuevaEmpresa.save((err, result) => {
         if (err) {
