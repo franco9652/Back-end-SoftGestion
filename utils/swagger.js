@@ -29,7 +29,7 @@ const swaggerDocs = (app, port) => {
   });
 
   console.log(
-    `version 1 de la documentacion esta disponible en http://localhost:${port}/api/v1/docs`
+    `version 1 de la documentacion esta disponible en http://localhost:${port}/api-docs`
   );
 };
 

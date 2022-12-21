@@ -7,8 +7,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('dotenv').config();
 const BDConnection = require('./utils/BD/dataBase');
-const { swaggerDocs: V1SwaggerDocs } = require('./utils/swagger');
-
 const indexRouter = require('./routes/index');
 
 const app = express();
@@ -23,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const { swaggerDocs: V1SwaggerDocs } = require('./utils/swagger');
 
 app.use('/', indexRouter);
 app.use('/api/v1', V1SwaggerDocs);
