@@ -33,7 +33,7 @@ const mongoose = require('mongoose');
  *           example: avsdjn43059g43rn234i-dsf
  */
 
-const entradaSchema = mongoose.Schema({
+const entradaSalidaSchema = mongoose.Schema({
   tipo: {
     type: String,
     required: true,
@@ -59,6 +59,6 @@ const entradaSchema = mongoose.Schema({
   },
 });
 
-const Entrada = mongoose.model('Entrada', entradaSchema);
+const EntradaSalida = mongoose.model('EntradaSalida', entradaSalidaSchema);
 
-module.exports = Entrada;
+module.exports = EntradaSalida;
