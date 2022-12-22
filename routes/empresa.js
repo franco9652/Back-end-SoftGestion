@@ -23,7 +23,7 @@ const router = express.Router();
  *           type: string
  *         description: el id del dueño de la empresa
  *     requestBody:
- *       description: Optional description in *Markdown*
+ *       description: datos requeridos para crear la empresa
  *       required: true
  *       content:
  *         application/json:
@@ -40,7 +40,7 @@ const router = express.Router();
  *                 response:
  *                   type: array
  *                   items:
- *                     $ref: "#/components/schemas/Empresa"
+ *                     $ref: "#/components/schemas/EntradSalida"
  *                 succes:
  *                   type: boolean
  *                   example: true
@@ -76,7 +76,7 @@ router.post('/create/:ownerId', crearEmpresa);
  * @openapi
  * /empresa/getOne/{empresaId}:
  *   get:
- *     summary: peticion para crear una empresa
+ *     summary: peticion para crear obtener una empresa
  *     tags:
  *       - Empresa
  *     parameters:

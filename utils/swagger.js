@@ -11,11 +11,11 @@ const options = {
   apis: [
     'routes/index.js',
     'routes/empresa.js',
-    'routes/entrada.js',
-    'routes/infoSalida.js',
+    'routes/entradaSalida.js',
     'routes/tareas.js',
     'routes/user.js',
     'models/EmpresaModel.js',
+    'models/EntradaSalidaModel.js',
   ],
 };
 
