@@ -16,6 +16,8 @@ const options = {
     'routes/user.js',
     'models/EmpresaModel.js',
     'models/EntradaSalidaModel.js',
+    'models/tareasModel.js',
+    'models/userModel.js',
   ],
 };
 
