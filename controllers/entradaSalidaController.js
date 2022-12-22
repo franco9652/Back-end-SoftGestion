@@ -38,24 +38,28 @@ const entradaController = {
     }
   },
   eliminarEntradaSalida: async (req, res) => {
-    const { userId, entradaId } = req.params;
+    const { userId, entradaSalidaId } = req.params;
     try {
-      const entrada = await EntradaSalida.findOne({ _id: entradaId });
-      await EntradaSalida.findOneAndDelete({ _id: entradaId });
-      if (entrada) {
-        // Eliminar el id del user que marca entrada
+      let entradaOSalida = await EntradaSalida.findOne({
+        _id: entradaSalidaId,
+      });
+      entradaOSalida = await EntradaSalida.findOneAndDelete({
+        _id: entradaSalidaId,
+      });
+      if (entradaOSalida) {
         await User.findOneAndUpdate(
           { _id: userId },
-          { $pull: { entradaSalida: entradaId } }
+          { $pull: { entradaSalida: entradaSalidaId } }
         );
         return res.status(200).json({
-          response: 'Entrada eliminada de manera exitosa',
+          response: `${entradaOSalida.tipo} eliminada de manera exitosa`,
           success: true,
         });
       }
     } catch (error) {
       res.status(404).json({
         response: error.message,
+        succes: false,
       });
     }
   },
