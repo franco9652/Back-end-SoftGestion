@@ -30,7 +30,7 @@ const router = express.Router();
  *           schema:
  *             $ref: '#/components/schemas/Empresa'
  *     responses:
- *       202:
+ *       201:
  *         description: Empresa creada
  *         content:
  *           application/json:

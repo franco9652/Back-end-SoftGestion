@@ -3,6 +3,7 @@ const {
   createUser,
   deleteUser,
   updateUser,
+  getUser,
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -47,9 +48,7 @@ const router = express.Router();
  *               type: object
  *               properties:
  *                 response:
- *                   type: array
- *                   items:
- *                     $ref: "#/components/schemas/User"
+ *                   $ref: "#/components/schemas/User"
  *                 succes:
  *                   type: boolean
  *                   example: true
@@ -187,5 +186,60 @@ router.delete('/:id', deleteUser);
  *                     example: false
  */
 router.patch('/:id', updateUser);
+/**
+ * @openapi
+ * /user/{id}:
+ *   get:
+ *     summary: peticion para obtener un usuario
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - name: id
+ *         required: true
+ *         in: path
+ *         schema:
+ *           type: string
+ *         description: id del usuario a obtener
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   $ref: "#/components/schemas/User"
+ *                 succes:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: X mesaje de error
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: Usuario no encontrado
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ */
+router.get('/:id', getUser);
 
 module.exports = router;

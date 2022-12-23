@@ -4,6 +4,24 @@ const mongoose = require('mongoose');
  * @openapi
  * components:
  *   schemas:
+ *     TareasBody:
+ *       type: object
+ *       properties:
+ *         fechaHora:
+ *           type: string
+ *           format: date-time
+ *         obra:
+ *           type: string
+ *           example: x obra
+ *         tarea:
+ *           type: string
+ *           example: ordenar las fichas por fecha
+ */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
  *     Tareas:
  *       type: object
  *       properties:
@@ -51,7 +69,7 @@ const TareasSchema = mongoose.Schema({
   },
   userId: {
     type: mongoose.Types.ObjectId,
-    required: true,
+    required: false,
     ref: 'User',
   },
   isSucces: {

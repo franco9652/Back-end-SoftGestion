@@ -35,9 +35,7 @@ const router = express.Router();
  *               type: object
  *               properties:
  *                 response:
- *                   type: array
- *                   items:
- *                     $ref: "#/components/schemas/EntradaSalida"
+ *                   $ref: "#/components/schemas/EntradaSalida"
  *                 succes:
  *                   type: boolean
  *                   example: true
