@@ -8,10 +8,8 @@ const Tarea = require('../models/TareasModel');
 
 const tareaControler = {
   crearTarea: async (req, res) => {
-    const { fechaHora, obra, tarea } = req.body;
     const { myId, userId } = req.params;
     const { fechaHora, obra, tarea } = req.body;
-    const { myId, userId } = req.params;
     try {
       const adminUser = await User.findOne({ _id: myId });
       const user = await User.findOne({ _id: userId });
@@ -120,19 +118,6 @@ const tareaControler = {
     const { taskId } = req.params;
     try {
       await Tarea.findOneAndUpdate({ _id: taskId }, req.body, { new: true })
-        .then((data) =>
-          res.status(200).json({
-            response: 'Tarea Actualizada',
-            data,
-            success: true,
-          })
-        )
-        .catch((err) =>
-          res.status(400).json({
-            response: err.message,
-            success: false,
-          })
-        );
         .then((data) =>
           res.status(200).json({
             response: 'Tarea Actualizada',
