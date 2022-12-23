@@ -32,6 +32,28 @@ const userController = {
     }
   },
 
+  getUser: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const user = await User.findOne({ _id: id });
+      if (!user) {
+        res.status(404).json({
+          response: 'Usuario no encontrado',
+          success: false,
+        });
+      }
+      return res.status(200).json({
+        response: user,
+        success: true,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        response: error.message,
+        success: false,
+      });
+    }
+  },
+
   deleteUser: async (req, res) => {
     const { id } = req.params;
     try {
