@@ -1,5 +1,35 @@
 const mongoose = require('mongoose');
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Empresa:
+ *       type: object
+ *       properties:
+ *         nombre:
+ *           type: string
+ *           example: Empresa X
+ *         tipoEmpresa:
+ *           type: string
+ *           example: logistica
+ *         habilitado:
+ *           type: boolean
+ *           example: true
+ *         direccion:
+ *           type: string
+ *           example: 'Cordoba-123'
+ *         facturacion:
+ *           type: string
+ *           example: factura.pdf
+ *         owner:
+ *           type: string
+ *         users:
+ *           type: array
+ *           items:
+ *             type: string
+ */
+
 const empresaSchema = mongoose.Schema({
   nombre: {
     type: String,

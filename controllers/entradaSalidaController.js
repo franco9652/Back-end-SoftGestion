@@ -1,12 +1,12 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
-const InfoSalida = require('../models/InfoSalidaModel');
+const EntradaSalida = require('../models/EntradaSalidaModel');
 const User = require('../models/UserModel');
 
-const infoSalidaController = {
-  crearInfoSalida: async (req, res) => {
-    const { fechaHora, latitud, longitud } = req.body;
+const entradaController = {
+  marcarIngresoEgreso: async (req, res) => {
+    const { fechaHora, latitud, longitud, tipo } = req.body;
     const { userId } = req.params;
     try {
       const user = await User.findOne({ _id: userId });
@@ -16,17 +16,18 @@ const infoSalidaController = {
           success: false,
         });
       }
-      const nuevaInfoSalida = await new InfoSalida({
+      const nuevaEntradaSalida = await new EntradaSalida({
+        tipo,
         fechaHora,
         latitud,
         longitud,
         user,
       }).populate('user');
-      nuevaInfoSalida.save();
-      user.infoSalida.push(nuevaInfoSalida._id);
+      nuevaEntradaSalida.save();
+      user.entradaSalida.push(nuevaEntradaSalida._id);
       user.save();
       return res.status(201).json({
-        response: nuevaInfoSalida,
+        response: nuevaEntradaSalida,
         succes: true,
       });
     } catch (err) {
@@ -36,28 +37,32 @@ const infoSalidaController = {
       });
     }
   },
-  eliminarInfoSalida: async (req, res) => {
-    const { userId, infoSalidaId } = req.params;
+  eliminarEntradaSalida: async (req, res) => {
+    const { userId, entradaSalidaId } = req.params;
     try {
-      const infoSalida = await InfoSalida.findOne({ _id: infoSalidaId });
-      await InfoSalida.findOneAndDelete({ _id: infoSalida });
-      if (infoSalida) {
-        // Eliminar el id del user que marca salida
+      let entradaOSalida = await EntradaSalida.findOne({
+        _id: entradaSalidaId,
+      });
+      entradaOSalida = await EntradaSalida.findOneAndDelete({
+        _id: entradaSalidaId,
+      });
+      if (entradaOSalida) {
         await User.findOneAndUpdate(
           { _id: userId },
-          { $pull: { infoSalida: infoSalidaId } }
+          { $pull: { entradaSalida: entradaSalidaId } }
         );
         return res.status(200).json({
-          response: 'Informacion de salida eliminada de manera exitosa',
+          response: `${entradaOSalida.tipo} eliminada de manera exitosa`,
           success: true,
         });
       }
     } catch (error) {
       res.status(404).json({
         response: error.message,
+        succes: false,
       });
     }
   },
 };
 
-module.exports = infoSalidaController;
+module.exports = entradaController;

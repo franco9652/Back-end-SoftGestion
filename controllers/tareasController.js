@@ -8,26 +8,18 @@ const Tarea = require('../models/TareasModel');
 
 const tareaControler = {
   crearTarea: async (req, res) => {
-    const { myId, userId } = req.params;
+    const { myId } = req.params;
     const { fechaHora, obra, tarea } = req.body;
     try {
       const adminUser = await User.findOne({ _id: myId });
-      const user = await User.findOne({ _id: userId });
-      if (!user) {
-        return res.status(400).json({
-          response: 'usuario no encontrado',
-          success: false,
-        });
-      }
-      if (adminUser && user) {
+      if (adminUser) {
         const nuevaTarea = await new Tarea({
           fechaHora,
           obra,
           tarea,
           nombre: adminUser._id,
-          userId: user._id,
-        }).populate(['nombre', 'userId']);
-        nuevaTarea.save(async (err, doc) => {
+        });
+        return nuevaTarea.save(async (err, doc) => {
           if (err) {
             return res.status(400).json({
               response: err.message,
@@ -38,23 +30,19 @@ const tareaControler = {
             { _id: myId },
             { $push: { asignacionTareas: nuevaTarea._id } }
           );
-          await User.findOneAndUpdate(
-            { _id: userId },
-            { $push: { asignacionTareas: nuevaTarea._id } }
-          );
           return res.status(201).json({
-            response: 'La tarea se agrego de manera exitosa',
+            response: 'La tarea se creo de manera exitosa',
             tarea: doc,
             succes: true,
           });
         });
       }
-      return res.status(400).json({
+      return res.status(404).json({
         response: 'usuario admin no encontrado',
         success: false,
       });
     } catch (err) {
-      res.status(400).json({
+      return res.status(400).json({
         response: err.message,
         success: false,
       });
@@ -64,13 +52,8 @@ const tareaControler = {
   eliminarTarea: async (req, res) => {
     const { taskId } = req.params;
     try {
-      await Tarea.findOneAndDelete({ _id: taskId }, async (err, doc) => {
-        if (err) {
-          res.status(400).json({
-            response: err.message,
-            success: false,
-          });
-        }
+      const task = await Tarea.findOneAndDelete({ _id: taskId })
+      if (task) {
         // Eliminar la tarea de todos los usuarios que la contengan
         await User.updateMany(
           { asignacionTareas: { $in: taskId } },
@@ -78,12 +61,19 @@ const tareaControler = {
         );
         return res.status(200).json({
           response: 'Tarea eliminada de manera exitosa',
-          tareaEliminada: doc,
+          tareaEliminada: task,
           success: true,
         });
+      }
+      return res.status(404).json({
+        response: 'Tarea no encontrada',
+        success: false,
       });
     } catch (error) {
-      res.status(404).json({});
+      res.status(404).json({
+        response: error.message,
+        success: false,
+      });
     }
   },
 
@@ -117,7 +107,9 @@ const tareaControler = {
   modificarTarea: async (req, res) => {
     const { taskId } = req.params;
     try {
-      await Tarea.findOneAndUpdate({ _id: taskId }, req.body, { new: true })
+      return await Tarea.findOneAndUpdate({ _id: taskId }, req.body, {
+        new: true,
+      })
         .then((data) =>
           res.status(200).json({
             response: 'Tarea Actualizada',
@@ -126,7 +118,7 @@ const tareaControler = {
           })
         )
         .catch((err) =>
-          res.status(400).json({
+          res.status(404).json({
             response: err.message,
             success: false,
           })
