@@ -3,6 +3,8 @@ const {
   crearTarea,
   eliminarTarea,
   modificarTarea,
+  asignarTarea,
+  obtenerTareas,
 } = require('../controllers/tareasController');
 
 const router = express.Router();
@@ -194,5 +196,130 @@ router.delete('/:taskId', eliminarTarea);
  *                     example: false
  */
 router.patch('/update/:taskId', modificarTarea);
+/**
+ * @openapi
+ * /tarea/asignar/{taskId}:
+ *   post:
+ *     summary: peticion para asignar una tarea
+ *     tags:
+ *       - Tarea
+ *     parameters:
+ *       - name: taskId
+ *         required: true
+ *         in: path
+ *         schema:
+ *           type: string
+ *         description: id del usuario que asigna la tarea
+ *     requestBody:
+ *       description: datos requeridos para crear la tarea
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *                userId:
+ *                   type: string
+ *                   required: true
+ *                   description: id del usuario al que se le asignara la tarea
+ *     responses:
+ *       200:
+ *         description: Entrada o Salida creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                   example: La tarea X fue asignada correctamenta a X
+ *                 succes:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: X mesaje de error
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ *       404:
+ *         description: Usuario o Tarea no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: usuario/Tarea no encontrada
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ */
+router.post('/asignar/:taskId', asignarTarea);
+/**
+ * @openapi
+ * /tarea/{suerId}:
+ *   get:
+ *     summary: peticion para obtener todas las tareas de un usuario
+ *     tags:
+ *       - Tarea
+ *     parameters:
+ *       - name: userId
+ *         required: true
+ *         in: path
+ *         schema:
+ *           type: string
+ *         description: id del usuario que contiene las tareas
+ *     responses:
+ *       200:
+ *         description: Lista de tareas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Tareas"
+ *                 succes:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: X mesaje de error
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ *       404:
+ *         description: Usuario o no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  response:
+ *                     type: string
+ *                     example: usuario no encontrado
+ *                  succes:
+ *                     type: boolean
+ *                     example: false
+ */
+router.get('/:userId', obtenerTareas);
 
 module.exports = router;
