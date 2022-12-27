@@ -3,5 +3,5 @@ module.exports = {
     port: 4000,
     domain: 'localhost',
   },
-  logger: 'dev', // para no tener logs cuando ejecutamos pruebas
+  logger: ' ', // para no tener logs cuando ejecutamos pruebas
 };
