@@ -4,6 +4,8 @@ const {
   deleteUser,
   updateUser,
   getUser,
+  login,
+  updatePassword,
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -247,5 +249,7 @@ router.patch('/:id', updateUser);
  *                     example: false
  */
 router.get('/:id', getUser);
+router.post('/login', login);
+router.post('/updatePass/:userId', updatePassword);
 
 module.exports = router;
