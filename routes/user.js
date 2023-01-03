@@ -39,6 +39,9 @@ const router = express.Router();
  *                 type: boolean
  *                 example: false
  *                 default: false
+ *               password:
+ *                 type: string
+ *                 example: miPassword
  *     responses:
  *       201:
  *         description: Usuario Creado
@@ -155,6 +158,9 @@ router.delete('/:id', deleteUser);
  *                 example: false
  *                 default: false
  *                 required: false
+ *               password:
+ *                 type: string
+ *                 example: miPassword
  *     responses:
  *       200:
  *         description: Usuario editado con exito
