@@ -21,8 +21,9 @@ const userController = {
         salary,
         password,
       });
-      user.save();
-      user.oldPasswords.push(user.password); // FIXME: no la guarda hasheada
+      await user.save();
+      user.oldPasswords.push(user.password);
+      await user.save();
       return res.status(201).json({
         response: user,
         success: true,
