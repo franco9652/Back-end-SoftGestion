@@ -82,7 +82,7 @@ const UserSchema = mongoose.Schema(
       required: true,
     },
     oldPasswords: {
-      type: Array,
+      type: [{ type: String }],
       required: false,
       default: [],
     },
@@ -99,37 +99,24 @@ const UserSchema = mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
-);
-
-UserSchema.pre('save', function (next) {
-  const user = this;
-  if (this.isModified('password') || this.isNew) {
-    bcrypt.genSalt(10, (saltError, salt) => {
-      if (saltError) {
-        return next(saltError);
-      }
-      bcrypt.hash(user.password, salt, (hashError, hash) => {
-        if (hashError) {
-          return next(hashError);
+  {
+    timestamps: true,
+    methods: {
+      verifyPass(password) {
+        const isMatch = bcrypt.compareSync(password, this.password);
+        return isMatch;
+      },
+      checkOldPass(password) {
+        if (this.oldPasswords.length === 0) {
+          return false;
         }
-        user.password = hash;
-        next();
-      });
-    });
-  } else {
-    return next();
+        return this.oldPasswords.some((element) =>
+          bcrypt.compareSync(password, element)
+        );
+      },
+    },
   }
-});
-
-UserSchema.methods.comparePassword = function (password, callback) {
-  bcrypt.compare(password, this.password, (error, isMatch) => {
-    if (error) {
-      return callback(error);
-    }
-    callback(null, isMatch);
-  });
-};
+);
 
 const User = mongoose.model('User', UserSchema);
 
