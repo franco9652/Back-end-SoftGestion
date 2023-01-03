@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+const bcrypt = require('bcryptjs');
 const User = require('../models/UserModel');
 
 const userController = {
@@ -21,8 +22,8 @@ const userController = {
         salary,
         password,
       });
+      user.oldPasswords.push(user.password);
       user.save();
-      user.oldPasswords.push(user.password); // FIXME: no la guarda hasheada
       return res.status(201).json({
         response: user,
         success: true,
@@ -107,27 +108,61 @@ const userController = {
       });
     }
   },
-  // TODO: login (dejo pseudocode de una web)
-  //   loginUser: function(username, password, callback) {
-  //     UserModel.findOne({username: username}).exec(function(error, user) {
-  //       if (error) {
-  //         callback({error: true})
-  //       } else if (!user) {
-  //         callback({error: true})
-  //       } else {
-  //         user.comparePassword(password, function(matchError, isMatch) {
-  //           if (matchError) {
-  //             callback({error: true})
-  //           } else if (!isMatch) {
-  //             callback({error: true})
-  //           } else {
-  //             callback({success: true})
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  // }
+  login: async (req, res) => {
+    const { dni, password } = req.body;
+    try {
+      const user = await User.findOne({ dni });
+      if (!user) {
+        return res.status(404).json({
+          response: 'Usuario no encontrado',
+          success: false,
+        });
+      }
+      if (user.verifyPass(password)) {
+        return res.status(200).json({
+          response: user,
+          success: true,
+        });
+      }
+    } catch (err) {
+      return res.status(400).json({
+        responsec: err.message,
+        success: false,
+      });
+    }
+  },
+  updatePassword: async (req, res) => {
+    const { password } = req.body;
+    const { userId } = req.params;
+    try {
+      const passHashed = await bcrypt.hashSync(password, 10);
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).json({
+          response: 'Usuario no encontrado',
+          success: false,
+        });
+      }
+      if (user.checkOldPass(password)) {
+        return res.status(400).json({
+          response: 'Ingresa una contraseña que no hayas utilizado',
+          success: false,
+        });
+      }
+      user.oldPasswords.push(passHashed);
+      user.password = passHashed;
+      user.save();
+      return res.status(200).json({
+        response: 'Contraseña actualizada con exito',
+        success: true,
+      });
+    } catch (err) {
+      return res.status(400).json({
+        response: err.message,
+        success: false,
+      });
+    }
+  },
 };
 
 module.exports = userController;
