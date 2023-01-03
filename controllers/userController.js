@@ -3,7 +3,7 @@ const User = require('../models/UserModel');
 
 const userController = {
   createUser: async (req, res) => {
-    const { name, lastName, image, dni, role } = req.body;
+    const { name, lastName, image, dni, role, salary, password } = req.body;
     try {
       let user = await User.findOne({ dni });
       if (user) {
@@ -18,8 +18,11 @@ const userController = {
         image,
         dni,
         role,
+        salary,
+        password,
       });
       user.save();
+      user.oldPasswords.push(user.password); // FIXME: no la guarda hasheada
       return res.status(201).json({
         response: user,
         success: true,
@@ -57,7 +60,7 @@ const userController = {
   deleteUser: async (req, res) => {
     const { id } = req.params;
     try {
-      User.findOneAndDelete({ _id: id }, (err, data) => {
+      await User.findOneAndDelete({ _id: id }, (err, data) => {
         if (err) {
           return res.status(400).json({
             response: err.message,
@@ -80,9 +83,10 @@ const userController = {
   },
 
   updateUser: async (req, res) => {
+    // TODO: almacenar pw nueva en el historial si es que se actualiza
     const { id } = req.params;
     try {
-      User.findOneAndUpdate({ _id: id }, req.body, { new: true })
+      await User.findOneAndUpdate({ _id: id }, req.body, { new: true })
         .then((data) =>
           res.status(200).json({
             response: 'usuario actualizado',
@@ -103,6 +107,27 @@ const userController = {
       });
     }
   },
+  // TODO: login (dejo pseudocode de una web)
+  //   loginUser: function(username, password, callback) {
+  //     UserModel.findOne({username: username}).exec(function(error, user) {
+  //       if (error) {
+  //         callback({error: true})
+  //       } else if (!user) {
+  //         callback({error: true})
+  //       } else {
+  //         user.comparePassword(password, function(matchError, isMatch) {
+  //           if (matchError) {
+  //             callback({error: true})
+  //           } else if (!isMatch) {
+  //             callback({error: true})
+  //           } else {
+  //             callback({success: true})
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  // }
 };
 
 module.exports = userController;
