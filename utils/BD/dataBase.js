@@ -3,12 +3,10 @@ const mongoose = require('mongoose');
 const { MONGO_URI } = process.env;
 
 mongoose.set('strictQuery', true);
-mongoose.connect(
-  MONGO_URI,
-  {
+mongoose
+  .connect(MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  },
-)
+  })
   .then(() => console.log('DB connected.'))
   .catch((err) => console.log(err));
