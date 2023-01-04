@@ -98,10 +98,10 @@ const UserSchema = mongoose.Schema(
         ref: 'Tarea',
       },
     ],
-    reciboSueldos: [
+    recibosSueldo: [
       {
-        binData: Buffer,
-        required: false,
+        type: mongoose.Types.ObjectId,
+        ref: 'Recibo',
       },
     ],
   },
