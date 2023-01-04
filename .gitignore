@@ -102,6 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-# generacion de recibos de sueldo
-output/*.pdf

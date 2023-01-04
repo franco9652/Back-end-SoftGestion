@@ -162,7 +162,6 @@ const userController = {
       });
     }
   },
-  generarReciboSueldo: async (req, res) => {},
 };
 
 module.exports = userController;
