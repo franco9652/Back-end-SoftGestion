@@ -48,6 +48,7 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
+// TODO: modularizar
 // creacion de recibos de sueldo en formato .pdf
 // Create a document
 const doc = new PDFDocument();
@@ -58,7 +59,7 @@ doc.pipe(fs.createWriteStream('./output/sueldos.pdf'));
 
 // Embed a font, set the font size, and render some text
 doc
-  //.font('./public/stylesheets/style.css/body.font') // TODO: insertar fuente
+  // .font('./public/stylesheets/style.css/body.font') // FIXME: insertar fuente
   .fontSize(25)
   .text('Recibo de sueldo', 100, 100);
 

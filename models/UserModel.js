@@ -98,6 +98,12 @@ const UserSchema = mongoose.Schema(
         ref: 'Tarea',
       },
     ],
+    reciboSueldos: [
+      {
+        binData: Buffer,
+        required: false,
+      },
+    ],
   },
   {
     timestamps: true,
