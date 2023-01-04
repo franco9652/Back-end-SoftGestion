@@ -40,7 +40,7 @@ const router = express.Router();
  *                 response:
  *                   type: array
  *                   items:
- *                     $ref: "#/components/schemas/EntradSalida"
+ *                     $ref: "#/components/schemas/Empresa"
  *                 succes:
  *                   type: boolean
  *                   example: true

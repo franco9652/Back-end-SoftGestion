@@ -48,11 +48,50 @@ const tareaControler = {
       });
     }
   },
+  asignarTarea: async (req, res) => {
+    const { taskId } = req.params;
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({
+        response: 'el campo de usuario debe estar completo',
+        success: false,
+      });
+    }
+    try {
+      const task = await Tarea.findOne({ _id: taskId });
+      const user = await User.findOne({ _id: userId });
+      if (!task) {
+        return res.status(404).json({
+          response: 'Tarea no encontrada',
+          success: false,
+        });
+      }
+      if (!user) {
+        return res.status(404).json({
+          response: 'Usuario no encontrado',
+          success: false,
+        });
+      }
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { $push: { asignacionTareas: task._id } }
+      );
+      return res.status(200).json({
+        response: `la tarea '${task.tarea}' fue asignada correctamenta a '${user.name}'`,
+        success: true,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        response: error.message,
+        succes: false,
+      });
+    }
+  },
 
   eliminarTarea: async (req, res) => {
     const { taskId } = req.params;
     try {
-      const task = await Tarea.findOneAndDelete({ _id: taskId })
+      const task = await Tarea.findOneAndDelete({ _id: taskId });
       if (task) {
         // Eliminar la tarea de todos los usuarios que la contengan
         await User.updateMany(
@@ -125,6 +164,29 @@ const tareaControler = {
         );
     } catch (err) {
       res.status(400).json({
+        response: err.message,
+        success: false,
+      });
+    }
+  },
+  obtenerTareas: async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const user = await User.findOne({ _id: userId }).populate(
+        'asignacionTareas'
+      );
+      if (!user) {
+        return res.status(404).json({
+          response: 'Usuario no encontrado',
+          success: false,
+        });
+      }
+      return res.status(200).json({
+        response: user.asignacionTareas,
+        success: true,
+      });
+    } catch (err) {
+      return res.status(400).json({
         response: err.message,
         success: false,
       });
