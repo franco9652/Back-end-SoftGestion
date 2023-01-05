@@ -7,10 +7,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('dotenv').config();
+const fileupload = require('express-fileupload');
 const BDConnection = require('./utils/BD/dataBase');
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+app.use(fileupload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
