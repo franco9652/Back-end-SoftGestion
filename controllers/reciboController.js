@@ -55,12 +55,23 @@ const reciboController = {
     }
   },
   // TODO: testear
+  /*
+   * funcion que retorna los recibos creados en el MM/YYYY pasados como query params.
+   * si mes o anio son vacios/undefined, retorno todos los recibos del sistema
+   */
   getRecibos: async (req, res) => {
-    const { fecha } = req.query;
+    const { anio, mes } = req.query;
     try {
-      let recibos = await Recibo.find();
-      if (!req.query || fecha === null || fecha === undefined) {
-        if (recibos) {
+      let recibos;
+      if (
+        !req.query ||
+        anio === null ||
+        anio === undefined ||
+        mes === null ||
+        mes === undefined
+      ) {
+        recibos = await Recibo.find();
+        if (recibos.length > 0) {
           return res.status(200).json({
             response: recibos,
             success: true,
@@ -74,19 +85,19 @@ const reciboController = {
       // FIXME: query para buscar en un mes y anio
       recibos = await Recibo.find({
         created_on: {
-          $gte: new Date(fecha),
-          $lt: new Date(fecha),
+          $gte: new Date(anio, mes),
+          $lt: new Date(anio, mes),
         },
       });
-      if (recibos) {
+      if (recibos.length > 0) {
         return res.status(200).json({
           response: recibos,
           success: true,
         });
       }
-      return res.status(404).json({
-        response: `No hay recibos en la fecha ${fecha}`,
-        success: false,
+      return res.status(200).json({
+        response: `No hay recibos en la fecha ${mes}/${anio}`,
+        success: true,
       });
     } catch (error) {
       return res.status(400).json({
