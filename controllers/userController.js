@@ -84,7 +84,6 @@ const userController = {
   },
 
   updateUser: async (req, res) => {
-    // TODO: almacenar pw nueva en el historial si es que se actualiza
     const { id } = req.params;
     try {
       await User.findOneAndUpdate({ _id: id }, req.body, { new: true })

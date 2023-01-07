@@ -98,6 +98,12 @@ const UserSchema = mongoose.Schema(
         ref: 'Tarea',
       },
     ],
+    recibosSueldo: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Recibo',
+      },
+    ],
   },
   {
     timestamps: true,
